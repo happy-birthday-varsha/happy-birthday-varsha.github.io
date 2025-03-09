@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Birthday Songs! 🎵</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Montserrat", sans-serif;
+                background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .container {
+                background-color: rgba(255, 255, 255, 0.9);
+                border-radius: 20px;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+                padding: 40px;
+                max-width: 800px;
+                width: 90%;
+                text-align: center;
+                position: relative;
+                z-index: 2;
+            }
+
+            h1 {
+                font-family: "Pacifico", cursive;
+                font-size: 3.5rem;
+                color: #ff6b6b;
+                margin-bottom: 20px;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            p {
+                font-size: 1.2rem;
+                line-height: 1.6;
+                color: #555;
+                margin-bottom: 30px;
+            }
+
+            .music-player {
+                background: rgba(255, 255, 255, 0.8);
+                border-radius: 15px;
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                margin-bottom: 30px;
+
+                backdrop-filter: blur(20px) contrast(0.8); /* Blur and contrast effect */
+                -webkit-backdrop-filter: blur(20px) contrast(20) brightness(10); /* Safari support */
+            }
+
+            .playlist {
+                list-style: none;
+                margin: 20px 0;
+                text-align: left;
+            }
+
+            .playlist-item {
+                padding: 15px;
+                margin: 10px 0;
+                background: #f8f9fa;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .playlist-item:hover {
+                background: #f1f3f5;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .playlist-item.active {
+                background: #ffe0e0;
+                border-left: 4px solid #ff6b6b;
+            }
+
+            .song-number {
+                font-weight: bold;
+                font-size: 1.2rem;
+                color: #ff6b6b;
+                margin-right: 15px;
+                min-width: 30px;
+            }
+
+            .song-info {
+                flex-grow: 1;
+            }
+
+            .song-title {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .song-description {
+                font-size: 0.9rem;
+                color: #777;
+            }
+
+            .controls {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+
+            .control-btn {
+                background: none;
+                border: none;
+                font-size: 1.8rem;
+                color: #555;
+                cursor: pointer;
+                margin: 0 15px;
+                transition: all 0.3s ease;
+            }
+
+            .control-btn:hover {
+                color: #ff6b6b;
+                transform: scale(1.1);
+            }
+
+            .control-btn.play-pause {
+                font-size: 2.5rem;
+                color: #ff6b6b;
+            }
+
+            .progress-container {
+                height: 5px;
+                background: #e9ecef;
+                border-radius: 5px;
+                margin: 20px 0;
+                cursor: pointer;
+            }
+
+            .progress-bar {
+                height: 100%;
+                background: #ff6b6b;
+                border-radius: 5px;
+                width: 0%;
+                transition: width 0.1s linear;
+            }
+
+            .time-display {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.8rem;
+                color: #777;
+            }
+
+            .btn {
+                background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                border-radius: 50px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+                margin: 0 10px;
+            }
+
+            .btn:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(255, 107, 107, 0.6);
+            }
+
+            .nav-buttons {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+
+            .music-note {
+                position: absolute;
+                font-size: 30px;
+                color: rgba(255, 255, 255, 0.6);
+                animation: float-note 8s linear infinite;
+                z-index: 1;
+            }
+
+            @keyframes float-note {
+                0% {
+                    transform: translate(0, 0) rotate(0deg);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(100px, -300px) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+
+            @media (max-width: 768px) {
+                h1 {
+                    font-size: 2.5rem;
+                    color: white;
+                }
+
+                .container {
+                    padding: 0px;
+                    background: transparent;
+                    box-shadow: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Our Special Songs 🎵</h1>
+            <p>
+                These songs remind us of special moments we've shared together.
+                Click on any song to play it!
+            </p>
+
+            <div class="music-player">
+                <ul class="playlist">
+                    <li
+                        class="playlist-item"
+                        data-song="https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/bell_ring.mp3"
+                    >
+                        <span class="song-number">1</span>
+                        <div class="song-info">
+                            <div class="song-title">Our First Dance</div>
+                            <div class="song-description">
+                                Remember when we first danced to this song under
+                                the stars?
+                            </div>
+                        </div>
+                    </li>
+                    <li
+                        class="playlist-item"
+                        data-song="https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/glass.mp3"
+                    >
+                        <span class="song-number">2</span>
+                        <div class="song-info">
+                            <div class="song-title">Road Trip Anthem</div>
+                            <div class="song-description">
+                                We played this on repeat during our road trip
+                                last summer!
+                            </div>
+                        </div>
+                    </li>
+                    <li
+                        class="playlist-item"
+                        data-song="https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/water_droplet.mp3"
+                    >
+                        <span class="song-number">3</span>
+                        <div class="song-info">
+                            <div class="song-title">Our Special Song</div>
+                            <div class="song-description">
+                                The one that always makes us both smile and
+                                think of each other.
+                            </div>
+                        </div>
+                    </li>
+                    <li
+                        class="playlist-item"
+                        data-song="https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/button_click.mp3"
+                    >
+                        <span class="song-number">4</span>
+                        <div class="song-info">
+                            <div class="song-title">Birthday Celebration</div>
+                            <div class="song-description">
+                                A perfect song to celebrate your special day!
+                            </div>
+                        </div>
+                    </li>
+                    <li
+                        class="playlist-item"
+                        data-song="https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/snap.mp3"
+                    >
+                        <span class="song-number">5</span>
+                        <div class="song-info">
+                            <div class="song-title">Late Night Vibes</div>
+                            <div class="song-description">
+                                Our favorite for those quiet evenings together.
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="progress-container" id="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+
+                <div class="time-display">
+                    <span id="current-time">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn" id="prev">⏮</button>
+                    <button class="control-btn play-pause" id="play-pause">
+                        ▶
+                    </button>
+                    <button class="control-btn" id="next">⏭</button>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn" onclick="window.location.href='index.html'">
+                    Back to Welcome
+                </button>
+                <button class="btn" onclick="window.location.href='cake.html'">
+                    Back to Cake
+                </button>
+            </div>
+        </div>
+
+        <div id="notes-container"></div>
+
+        <script>
+            // Audio player
+            let currentAudio = null;
+            let isPlaying = false;
+            let currentSongIndex = 0;
+            const playlist = document.querySelectorAll(".playlist-item");
+            const playPauseBtn = document.getElementById("play-pause");
+            const prevBtn = document.getElementById("prev");
+            const nextBtn = document.getElementById("next");
+            const progressBar = document.getElementById("progress-bar");
+            const progressContainer =
+                document.getElementById("progress-container");
+            const currentTimeEl = document.getElementById("current-time");
+            const durationEl = document.getElementById("duration");
+
+            // Initialize
+            function init() {
+                // Add event listeners to playlist items
+                playlist.forEach((item, index) => {
+                    item.addEventListener("click", () => {
+                        currentSongIndex = index;
+                        playSong();
+                    });
+                });
+
+                // Play/Pause button
+                playPauseBtn.addEventListener("click", () => {
+                    if (isPlaying) {
+                        pauseSong();
+                    } else {
+                        playSong();
+                    }
+                });
+
+                // Previous button
+                prevBtn.addEventListener("click", () => {
+                    currentSongIndex--;
+                    if (currentSongIndex < 0) {
+                        currentSongIndex = playlist.length - 1;
+                    }
+                    playSong();
+                });
+
+                // Next button
+                nextBtn.addEventListener("click", () => {
+                    currentSongIndex++;
+                    if (currentSongIndex > playlist.length - 1) {
+                        currentSongIndex = 0;
+                    }
+                    playSong();
+                });
+
+                // Progress bar
+                progressContainer.addEventListener("click", setProgress);
+
+                // Create floating music notes
+                createMusicNotes();
+            }
+
+            // Play song
+            function playSong() {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+
+                // Remove active class from all items
+                playlist.forEach((item) => {
+                    item.classList.remove("active");
+                });
+
+                // Add active class to current song
+                playlist[currentSongIndex].classList.add("active");
+
+                // Get song source
+                const songSrc =
+                    playlist[currentSongIndex].getAttribute("data-song");
+
+                // Create new audio element
+                currentAudio = new Audio(songSrc);
+
+                // Play audio
+                currentAudio.play();
+                isPlaying = true;
+                playPauseBtn.innerHTML = "⏸";
+
+                // Update progress and time
+                currentAudio.addEventListener("timeupdate", updateProgress);
+
+                // When song ends
+                currentAudio.addEventListener("ended", () => {
+                    currentSongIndex++;
+                    if (currentSongIndex > playlist.length - 1) {
+                        currentSongIndex = 0;
+                    }
+                    playSong();
+                });
+
+                // Create more music notes
+                createMusicNotes(5);
+            }
+
+            // Pause song
+            function pauseSong() {
+                currentAudio.pause();
+                isPlaying = false;
+                playPauseBtn.innerHTML = "▶";
+            }
+
+            // Update progress
+            function updateProgress() {
+                const { duration, currentTime } = currentAudio;
+                const progressPercent = (currentTime / duration) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+
+                // Update time display
+                const durationMinutes = Math.floor(duration / 60);
+                const durationSeconds = Math.floor(duration % 60);
+                if (duration) {
+                    durationEl.textContent = `${durationMinutes}:${durationSeconds < 10 ? "0" : ""}${durationSeconds}`;
+                }
+
+                const currentMinutes = Math.floor(currentTime / 60);
+                const currentSeconds = Math.floor(currentTime % 60);
+                currentTimeEl.textContent = `${currentMinutes}:${currentSeconds < 10 ? "0" : ""}${currentSeconds}`;
+            }
+
+            // Set progress on click
+            function setProgress(e) {
+                const width = this.clientWidth;
+                const clickX = e.offsetX;
+                const duration = currentAudio.duration;
+                currentAudio.currentTime = (clickX / width) * duration;
+            }
+
+            // Create floating music notes
+            function createMusicNotes(count = 10) {
+                const notesContainer =
+                    document.getElementById("notes-container");
+                const notes = ["♪", "♫", "🎵", "🎶"];
+
+                for (let i = 0; i < count; i++) {
+                    const note = document.createElement("div");
+                    note.className = "music-note";
+                    note.textContent =
+                        notes[Math.floor(Math.random() * notes.length)];
+
+                    // Random position and animation
+                    note.style.left = `${Math.random() * 100}%`;
+                    note.style.bottom = `${Math.random() * 10}%`;
+                    note.style.animationDuration = `${Math.random() * 5 + 3}s`;
+                    note.style.animationDelay = `${Math.random() * 5}s`;
+
+                    notesContainer.appendChild(note);
+
+                    // Remove note after animation ends
+                    setTimeout(
+                        () => {
+                            note.remove();
+                        },
+                        (parseFloat(note.style.animationDuration) +
+                            parseFloat(note.style.animationDelay)) *
+                            1000,
+                    );
+                }
+            }
+
+            // Initialize on page load
+            window.addEventListener("load", init);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Memory Lane 📸</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Montserrat", sans-serif;
+                background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .title {
+                font-family: "Pacifico", cursive;
+                font-size: 3.5rem;
+                color: #6c5ce7;
+                margin: 30px 0;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                z-index: 10;
+            }
+
+            .slider-container {
+                width: 80%;
+                max-width: 1000px;
+                height: 500px;
+                position: relative;
+                overflow: hidden;
+                border-radius: 20px;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+                z-index: 2;
+            }
+
+            .slides {
+                display: flex;
+                width: 500%;
+                height: 100%;
+                transition: transform 0.8s ease-in-out;
+            }
+
+            .slide {
+                width: 20%;
+                height: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+
+                backdrop-filter: blur(20px) contrast(0.8); /* Blur and contrast effect */
+                -webkit-backdrop-filter: blur(20px) contrast(20) brightness(10); /* Safari support */
+
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+
+            .slide:hover img {
+                transform: scale(1.05);
+            }
+
+            .slide-content {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                padding: 20px;
+                background: rgba(0, 0, 0, 0.5);
+                color: white;
+                transform: translateY(100%);
+                transition: transform 0.5s ease;
+                backdrop-filter: blur(20px) contrast(0.8); /* Blur and contrast effect */
+                -webkit-backdrop-filter: blur(20px) contrast(20) brightness(10); /* Safari support */
+            }
+
+            .slide:hover .slide-content {
+                transform: translateY(0);
+            }
+
+            .slide-content h3 {
+                font-family: "Pacifico", cursive;
+                margin-bottom: 10px;
+            }
+
+            .controls {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+                z-index: 5;
+            }
+
+            .btn {
+                background: linear-gradient(to right, #6c5ce7, #a88beb);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                font-size: 1rem;
+                font-weight: bold;
+                border-radius: 50px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+                margin: 0 10px;
+            }
+
+            .btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 20px rgba(108, 92, 231, 0.6);
+            }
+
+            .slider-nav {
+                display: flex;
+                justify-content: center;
+                margin: 20px 0;
+            }
+
+            .nav-dot {
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.5);
+                margin: 0 5px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .nav-dot.active {
+                background-color: #6c5ce7;
+                transform: scale(1.2);
+            }
+
+            .floating-photo {
+                position: absolute;
+                width: 150px;
+                height: 200px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                padding: 10px;
+                transform-origin: center;
+                animation: float-photo 10s ease-in-out infinite;
+                z-index: 1;
+            }
+
+            .floating-photo img {
+                width: 100%;
+                height: 85%;
+                object-fit: cover;
+                border-radius: 5px;
+            }
+
+            .floating-photo p {
+                font-size: 0.8rem;
+                text-align: center;
+                margin-top: 10px;
+                color: #6c5ce7;
+                font-family: "Pacifico", cursive;
+            }
+
+            .nav-arrows {
+                position: absolute;
+                top: 50%;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                padding: 0 20px;
+                transform: translateY(-50%);
+                z-index: 10;
+            }
+
+            .arrow {
+                background-color: rgba(255, 255, 255, 0.5);
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: bold;
+                font-size: 1.5rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+                backdrop-filter: blur(10px) contrast(0.8); /* Blur and contrast effect */
+                -webkit-backdrop-filter: blur(10px) contrast(20) brightness(10); /* Safari support */
+            }
+
+            .arrow:hover {
+                background-color: white;
+                transform: scale(1.1);
+            }
+
+            @keyframes float-photo {
+                0%,
+                100% {
+                    transform: translateY(0) rotate(2deg);
+                }
+                50% {
+                    transform: translateY(-20px) rotate(-2deg);
+                }
+            }
+
+            @media (max-width: 768px) {
+                .title {
+                    font-size: 2.5rem;
+                }
+
+                .slider-container {
+                    width: 90%;
+                    height: 400px;
+                }
+
+                .floating-photo {
+                    width: 120px;
+                    height: 160px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class="title">Our Memory Lane</h1>
+
+        <div class="slider-container">
+            <div class="slides" id="slides">
+                <!-- Using placeholder GIFs for demonstration -->
+                <div class="slide">
+                    <img
+                        src="https://picsum.photos/1000/500?random=1"
+                        alt="Memory 1"
+                    />
+                    <div class="slide-content">
+                        <h3>Our First Adventure</h3>
+                        <p>
+                            Remember when we spontaneously decided to explore
+                            that hidden trail? It was the beginning of so many
+                            adventures!
+                        </p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img
+                        src="https://picsum.photos/1000/500?random=2"
+                        alt="Memory 2"
+                    />
+                    <div class="slide-content">
+                        <h3>Beach Sunset</h3>
+                        <p>
+                            That magical evening when the sky painted itself in
+                            pinks and oranges just for us.
+                        </p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img
+                        src="https://picsum.photos/1000/500?random=3"
+                        alt="Memory 3"
+                    />
+                    <div class="slide-content">
+                        <h3>Cozy Winter Days</h3>
+                        <p>
+                            Hot chocolate, blankets, and you - perfect
+                            combination for the chilliest days.
+                        </p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img
+                        src="https://picsum.photos/1000/500?random=4"
+                        alt="Memory 4"
+                    />
+                    <div class="slide-content">
+                        <h3>Celebration Time</h3>
+                        <p>
+                            Every moment with you feels like a special occasion
+                            worth celebrating!
+                        </p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img
+                        src="https://picsum.photos/1000/500?random=5"
+                        alt="Memory 5"
+                    />
+                    <div class="slide-content">
+                        <h3>Just Us</h3>
+                        <p>
+                            Sometimes the simplest moments together become the
+                            most treasured memories.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-arrows">
+                <div class="arrow" onclick="navigate(-1)">❮</div>
+                <div class="arrow" onclick="navigate(1)">❯</div>
+            </div>
+        </div>
+
+        <div class="slider-nav" id="sliderNav"></div>
+
+        <div class="controls">
+            <button class="btn" onclick="startSlideshow()">
+                Start Slideshow
+            </button>
+            <button class="btn" onclick="location.href='index.html'">
+                Back to Welcome
+            </button>
+            <button class="btn" onclick="location.href='cake.html'">
+                Next Surprise!
+            </button>
+        </div>
+
+        <!-- Floating photos decoration -->
+        <div
+            class="floating-photo"
+            style="
+                top: 15%;
+                left: 10%;
+                animation-delay: 0s;
+                transform: rotate(-5deg);
+            "
+        >
+            <img
+                src="https://picsum.photos/1000/500?random=6"
+                alt="Floating memory"
+            />
+            <p>Remember this?</p>
+        </div>
+
+        <div
+            class="floating-photo"
+            style="
+                top: 20%;
+                right: 10%;
+                animation-delay: 2s;
+                transform: rotate(5deg);
+            "
+        >
+            <img
+                src="https://picsum.photos/1000/500?random=7"
+                alt="Floating memory"
+            />
+            <p>Good times!</p>
+        </div>
+
+        <div
+            class="floating-photo"
+            style="
+                bottom: 15%;
+                left: 15%;
+                animation-delay: 4s;
+                transform: rotate(8deg);
+            "
+        >
+            <img
+                src="https://picsum.photos/1000/500?random=8"
+                alt="Floating memory"
+            />
+            <p>Unforgettable!</p>
+        </div>
+
+        <div
+            class="floating-photo"
+            style="
+                bottom: 20%;
+                right: 15%;
+                animation-delay: 1s;
+                transform: rotate(-8deg);
+            "
+        >
+            <img
+                src="https://picsum.photos/1000/500?random=9"
+                alt="Floating memory"
+            />
+            <p>Love this one!</p>
+        </div>
+
+        <script>
+            let currentSlide = 0;
+            const totalSlides = 5;
+            const slidesElement = document.getElementById("slides");
+            const sliderNav = document.getElementById("sliderNav");
+            let slideshowInterval;
+
+            // Create navigation dots
+            function createNavDots() {
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement("div");
+                    dot.className = "nav-dot" + (i === 0 ? " active" : "");
+                    dot.onclick = () => goToSlide(i);
+                    sliderNav.appendChild(dot);
+                }
+            }
+
+            // Update navigation dots
+            function updateNavDots() {
+                const dots = document.querySelectorAll(".nav-dot");
+                dots.forEach((dot, index) => {
+                    dot.className =
+                        "nav-dot" + (index === currentSlide ? " active" : "");
+                });
+            }
+
+            // Go to specific slide
+            function goToSlide(index) {
+                currentSlide = index;
+                slidesElement.style.transform = `translateX(-${currentSlide * 20}%)`;
+                updateNavDots();
+            }
+
+            // Navigate slides
+            function navigate(direction) {
+                currentSlide =
+                    (currentSlide + direction + totalSlides) % totalSlides;
+                goToSlide(currentSlide);
+            }
+
+            // Start automatic slideshow
+            function startSlideshow() {
+                // Stop any existing slideshow
+                clearInterval(slideshowInterval);
+
+                // Start new slideshow
+                slideshowInterval = setInterval(() => {
+                    navigate(1);
+                }, 3000);
+
+                // Change button text
+                const slideshowBtn = document.querySelector(".controls .btn");
+                slideshowBtn.innerText = "Stop Slideshow";
+                slideshowBtn.onclick = stopSlideshow;
+            }
+
+            // Stop slideshow
+            function stopSlideshow() {
+                clearInterval(slideshowInterval);
+
+                // Change button text back
+                const slideshowBtn = document.querySelector(".controls .btn");
+                slideshowBtn.innerText = "Start Slideshow";
+                slideshowBtn.onclick = startSlideshow;
+            }
+
+            // Initialize on page load
+            window.onload = function () {
+                createNavDots();
+
+                // Add touch swipe functionality
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                const slider = document.querySelector(".slider-container");
+
+                slider.addEventListener("touchstart", (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+
+                slider.addEventListener("touchend", (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                });
+
+                function handleSwipe() {
+                    if (touchEndX < touchStartX) {
+                        navigate(1); // Swipe left
+                    } else if (touchEndX > touchStartX) {
+                        navigate(-1); // Swipe right
+                    }
+                }
+            };
+        </script>
+    </body>
+</html>

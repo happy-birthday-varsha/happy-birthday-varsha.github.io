@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Happy Birthday! 🎉</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Montserrat", sans-serif;
+                background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+                min-height: 100dvh;
+                max-height: 100dvh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .container {
+                background-color: rgba(255, 255, 255, 0.5);
+                border-radius: 20px;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+                padding: 40px;
+                max-width: 800px;
+                width: 90%;
+                text-align: center;
+                position: relative;
+                z-index: 2;
+                transform: translateY(0);
+                animation: float 6s ease-in-out infinite;
+
+                backdrop-filter: blur(20px) contrast(0.8); /* Blur and contrast effect */
+                -webkit-backdrop-filter: blur(20px) contrast(20) brightness(10); /* Safari support */
+            }
+
+            h1 {
+                font-family: "Pacifico", cursive;
+                font-size: 4rem;
+                color: #ff6b6b;
+                margin-bottom: 20px;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            p {
+                font-size: 1.2rem;
+                line-height: 1.6;
+                color: #555;
+                margin-bottom: 30px;
+            }
+
+            .btn {
+                background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                border-radius: 50px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            }
+
+            .btn:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(255, 107, 107, 0.6);
+            }
+
+            .confetti {
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background-color: #f0f;
+                top: -10px;
+                animation: fall linear forwards;
+            }
+
+            .balloon {
+                position: absolute;
+                width: 60px;
+                height: 70px;
+                background: radial-gradient(
+                    circle at 30% 30%,
+                    #fff,
+                    transparent
+                );
+                border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+                animation: float-balloon 15s ease-in-out infinite;
+                box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.2);
+            }
+
+            .balloon::before {
+                content: "";
+                position: absolute;
+                width: 2px;
+                height: 80px;
+                background: rgba(0, 0, 0, 0.2);
+                bottom: -80px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .gift-box {
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                background: #ff6b6b;
+                bottom: 40px;
+                border-radius: 10px;
+                animation: shake 5s ease-in-out infinite;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+            }
+
+            .gift-box::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 20px;
+                background: #ff8e8e;
+                top: 40px;
+                left: 0;
+            }
+
+            .gift-box::after {
+                content: "";
+                position: absolute;
+                width: 20px;
+                height: 100%;
+                background: #ff8e8e;
+                top: 0;
+                left: 40px;
+            }
+
+            .gift-lid {
+                position: absolute;
+                width: 120px;
+                height: 30px;
+                background: #ff8e8e;
+                top: -15px;
+                left: -10px;
+                border-radius: 5px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .gift-lid::before {
+                content: "";
+                position: absolute;
+                width: 30px;
+                height: 30px;
+                background: #ff6b6b;
+                top: -20px;
+                left: 45px;
+                border-radius: 50%;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+            }
+
+            @keyframes float-balloon {
+                0%,
+                100% {
+                    transform: translateY(0) rotate(5deg);
+                }
+                50% {
+                    transform: translateY(-50px) rotate(-5deg);
+                }
+            }
+
+            @keyframes shake {
+                0%,
+                100% {
+                    transform: rotate(0);
+                }
+                25% {
+                    transform: rotate(5deg);
+                }
+                50% {
+                    transform: rotate(0);
+                }
+                75% {
+                    transform: rotate(-5deg);
+                }
+            }
+
+            @keyframes fall {
+                to {
+                    top: 100%;
+                    transform: rotate(360deg);
+                }
+            }
+
+            @media (max-width: 768px) {
+                h1 {
+                    font-size: 3rem;
+                }
+
+                .container {
+                    padding: 30px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Happy Birthday!</h1>
+            <p>
+                On this special day, I wanted to create something unique for
+                you. This is the beginning of a journey through our memories and
+                special moments together.
+            </p>
+            <p>Click the button below to continue this birthday adventure!</p>
+            <button class="btn" onclick="startCelebration()">
+                Begin The Celebration! 🎉
+            </button>
+        </div>
+
+        <div id="balloons-container"></div>
+        <div id="confetti-container"></div>
+
+        <!-- Gift boxes decorations -->
+        <div class="gift-box" style="left: 10%; bottom: 50px">
+            <div class="gift-lid"></div>
+        </div>
+        <div class="gift-box" style="right: 15%; bottom: 70px">
+            <div class="gift-lid"></div>
+        </div>
+
+        <script>
+            // Create balloon elements
+            function createBalloons() {
+                const colors = [
+                    "#ff6b6b",
+                    "#48dbfb",
+                    "#1dd1a1",
+                    "#feca57",
+                    "#f368e0",
+                    "#ff9f43",
+                ];
+                const balloonsContainer =
+                    document.getElementById("balloons-container");
+
+                for (let i = 0; i < 10; i++) {
+                    const balloon = document.createElement("div");
+                    balloon.className = "balloon";
+                    balloon.style.left = `${Math.random() * 100}%`;
+                    balloon.style.bottom = `${Math.random() * 50}%`;
+                    balloon.style.backgroundColor =
+                        colors[Math.floor(Math.random() * colors.length)];
+                    balloon.style.animationDelay = `${Math.random() * 5}s`;
+                    balloon.style.zIndex = Math.floor(Math.random() * 2);
+                    balloonsContainer.appendChild(balloon);
+                }
+            }
+
+            // Create confetti effect
+            function createConfetti() {
+                const confettiContainer =
+                    document.getElementById("confetti-container");
+                const colors = [
+                    "#ff6b6b",
+                    "#48dbfb",
+                    "#1dd1a1",
+                    "#feca57",
+                    "#f368e0",
+                    "#ff9f43",
+                ];
+
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement("div");
+                    confetti.className = "confetti";
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.backgroundColor =
+                        colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = `${Math.random() * 10 + 5}px`;
+                    confetti.style.height = `${Math.random() * 10 + 5}px`;
+                    confetti.style.opacity = Math.random() + 0.5;
+                    confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                    confettiContainer.appendChild(confetti);
+                }
+            }
+
+            // Redirect to memory lane page with effects
+            function startCelebration() {
+                createConfetti();
+                document.querySelector(".container").style.transform =
+                    "scale(0.8) translateY(-500px)";
+                document.querySelector(".container").style.opacity = "0";
+                document.querySelector(".container").style.filter =
+                    "blur(20px)";
+                document.querySelector(".container").style.transition =
+                    "all 1s ease-in-out";
+
+                setTimeout(() => {
+                    window.location.href = "memorylane.html";
+                }, 1000);
+            }
+
+            // Initialize on page load
+            window.onload = function () {
+                createBalloons();
+
+                // Add some initial confetti
+                setTimeout(createConfetti, 500);
+            };
+        </script>
+    </body>
+</html>
